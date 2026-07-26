@@ -2,7 +2,7 @@ import { Router } from "express";
 import { 
     createStructuredReview,
     findStructuredReviewsBySongId
-} from "../controllers/structuredreview.controller";
+} from "../controllers/structuredreview.controller.js";
 
 const router = Router();
 router.route("/createStructuredReview").post(createStructuredReview);
