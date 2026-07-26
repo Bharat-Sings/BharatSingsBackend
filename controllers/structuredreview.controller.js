@@ -2,16 +2,18 @@ import { PrismaClient } from "@prisma/client";
 import { asyncHandler } from "../utils/AsyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { IoPrismSharp } from "react-icons/io5";
-import { connect } from "mongoose";
 
 const prisma = new PrismaClient();
 
 const createStructuredReview = asyncHandler(async(req, res) => {
     let { songId, userId, melody, rhythm, pitch, voice } = req.body;
 
+    // FIX: `!field` treats 0 as missing, which breaks the lowest
+    // possible score on a 0-100 scale. Check for undefined/null instead.
     if (
-        [songId, userId, melody, rhythm, pitch, voice].some((field) => !field)
+        [songId, userId, melody, rhythm, pitch, voice].some(
+            (field) => field === undefined || field === null
+        )
     ) {
         throw new ApiError(400, "All fields are necessary");
     }
@@ -68,9 +70,10 @@ const findStructuredReviewsBySongId = asyncHandler(async(req, res) => {
         throw new ApiError(400, "Song Id undefined");
     }
 
+    // FIX: req.query values are always strings; songId is an Int column.
     const structuredReviews = await prisma.structured_review.findMany({
         where: {
-            songId: songId
+            songId: parseInt(songId, 10)
         }
     });
 
