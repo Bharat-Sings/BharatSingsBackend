@@ -67,15 +67,17 @@ model Song {
 }
 
 model structured_review {
-  id     Int    @id @default(autoincrement())
-  melody String
-  rhythm String
-  Pitch  String
-  Voice  String
+  id     Int  @id @default(autoincrement())
+  melody Int
+  rhythm Int
+  pitch  Int
+  voice  Int
   userId Int
-  user   User   @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
   songId Int
-  song   Song   @relation(fields: [songId], references: [id])
+  song   Song @relation(fields: [songId], references: [id])
+
+  @@unique([songId, userId])
 }
 
 model audio_file {
