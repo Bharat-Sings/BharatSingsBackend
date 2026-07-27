@@ -65,7 +65,7 @@ const createSong = asyncHandler(async (req, res) => {
 });
 
 const findSongsByUserId = asyncHandler(async(req, res) => {
-    let { userId } = req.body;
+    let { userId } = req.query;
 
     if (!userId) {
         throw new ApiError(400, "User Id undefined");
