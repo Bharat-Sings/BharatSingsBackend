@@ -6,10 +6,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const prisma = new PrismaClient();
 
 const createTrainer = asyncHandler(async (req, res) => {
-    let { name, category, description } = req.body;
+    let { name, email, country, category, description } = req.body;
 
     if (
-        [name, category, description].some((field) => !field || field?.trim() === "")
+        [name, email, category, description].some((field) => !field || field?.trim() === "")
     ) {
         throw new ApiError(401, "All fields are necessary");
     }
@@ -17,6 +17,7 @@ const createTrainer = asyncHandler(async (req, res) => {
     const trainer = await prisma.trainer.create({
         data: {
             name,
+            email,
             category,
             description
         }

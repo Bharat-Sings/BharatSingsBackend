@@ -231,6 +231,7 @@ model subscription_plan {
 model Trainer {
   id              Int              @id @default(autoincrement())
   name            String
+  email           String           @unique
   description     String
   category        String
   is_active       Boolean          @default(true)
