@@ -7,7 +7,7 @@ import { IoPrismSharp } from "react-icons/io5";
 const prisma = new PrismaClient();
 
 const createCourse = asyncHandler(async(req, res) => {
-    let { title, description, category, language_id, price } = req.body;
+    let { title, description, category, language_id, price, paytm_phone_number } = req.body;
 
     const trainer_id = req.trainer.id;
 
@@ -16,7 +16,7 @@ const createCourse = asyncHandler(async(req, res) => {
     }
 
     if (
-        [title, description, category].some(
+        [title, description, category, paytm_phone_number].some(
             (field) => !field || field?.trim() === ""
         ) || (
             [price, language_id].some((field) => !field)
@@ -32,7 +32,8 @@ const createCourse = asyncHandler(async(req, res) => {
             category,
             language_id,
             trainer_id,
-            price
+            price,
+            paytm_phone_number
         }
     });
 
