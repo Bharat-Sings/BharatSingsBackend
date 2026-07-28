@@ -152,6 +152,7 @@ model course {
   course_reviews course_review[]
   enrollments    enrollment[]
   live_sessions  live_session[]
+  videos         video[]
 }
 
 model course_module {
@@ -175,9 +176,12 @@ model lesson {
 
 model video {
   id          Int      @id @default(autoincrement())
+  name        String
   file_path   String
-  duration    Int
-  uploaded_by Int
+  duration    Int?
+  //uploaded_by Int
+  course_id   Int
+  course      course   @relation(fields: [course_id], references: [id])
   uploaded_at DateTime @default(now())
 }
 
