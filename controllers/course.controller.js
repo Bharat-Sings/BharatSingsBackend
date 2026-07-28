@@ -193,11 +193,52 @@ const findCoursesByTrainerId = asyncHandler(async(req, res) => {
     );
 });
 
+const deleteCourse = asyncHandler(async(req, res) => {
+    const { courseId } = req.body;
+
+    if (!courseId) {
+        throw new ApiError(400, "Course Id Undefined");
+    }
+
+    const trainerId = req.trainer.id;
+
+    if (!trainerId) {
+        throw new ApiError(401, "Unauthorized Request");
+    }
+
+    const course = await prisma.course.findUnique({
+        where: {
+            id: courseId
+        }
+    });
+
+    if (!course) {
+        throw new ApiError(404, "Course Not Found");
+    }
+
+    await prisma.course.delete({
+        where: {
+            id: courseId
+        }
+    });
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            {},
+            "Successfully Deleted Course"
+        )
+    );
+});
+
 export {
     createCourse,
     findCourses,
     findCoursesByTitle,
     findCoursesByCategory,
     findCoursesByLanguage,
-    findCoursesByTrainerId
+    findCoursesByTrainerId,
+    deleteCourse
 }
