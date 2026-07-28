@@ -2,8 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { asyncHandler } from "../utils/AsyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { IoPrismSharp } from "react-icons/io5";
-import { video } from "@cloudinary/url-gen/qualifiers/source";
 
 const prisma = new PrismaClient();
 
