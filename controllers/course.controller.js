@@ -165,10 +165,10 @@ const findCoursesByLanguage = asyncHandler(async(req, res) => {
 });
 
 const findCoursesByTrainerId = asyncHandler(async(req, res) => {
-    let { trainer_id } = req.query;
+    const trainer_id = req.trainer.id;
 
     if (!trainer_id) {
-        throw new ApiError(400, "Trainer Id undefined");
+        throw new ApiError(401, "Unauthorized Request");
     }
 
     const courses = await prisma.course.findMany({
