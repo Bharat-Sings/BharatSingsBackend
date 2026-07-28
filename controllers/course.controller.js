@@ -7,13 +7,19 @@ import { IoPrismSharp } from "react-icons/io5";
 const prisma = new PrismaClient();
 
 const createCourse = asyncHandler(async(req, res) => {
-    let { title, description, category, language_id, trainer_id, price } = req.body;
+    let { title, description, category, language_id, price } = req.body;
+
+    const trainer_id = req.trainer.id;
+
+    if (!trainer_id) {
+        throw new ApiError(401, "Unauthorized Request");
+    }
 
     if (
         [title, description, category].some(
             (field) => !field || field?.trim() === ""
         ) || (
-            [price, language_id, trainer_id].some((field) => !field)
+            [price, language_id].some((field) => !field)
         )
     ) {
         throw new ApiError(401, "All fields are necessary");
