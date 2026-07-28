@@ -6,10 +6,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const prisma = new PrismaClient();
 
 const createVideo = asyncHandler(async(req, res) => {
-    let { video_id, course_id, name, file_path } = req.body;
+    let { course_id, name, file_path } = req.body;
 
     if (
-        [video_id, course_id].some((field) => !field)
+        !course_id
         ||
         [name, file_path].some((field) => !field || field?.trim() === "")
     ) {
@@ -28,7 +28,6 @@ const createVideo = asyncHandler(async(req, res) => {
 
     const video = await prisma.video.create({
         data: {
-            id: video_id,
             course: {
                 connect: {
                     id: course_id
