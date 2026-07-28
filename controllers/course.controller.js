@@ -55,7 +55,14 @@ const createCourse = asyncHandler(async(req, res) => {
 });
 
 const findCourses = asyncHandler(async(req, res) => {
-    const courses = await prisma.course.findMany();
+    const courses = await prisma.course.findMany({
+        where: {
+            is_published: true,
+        },
+        include: {
+            language: true,
+        },
+    });
 
     if (!courses) {
         throw new ApiError(500, "Error finding courses");
@@ -173,8 +180,9 @@ const findCoursesByTrainerId = asyncHandler(async(req, res) => {
 
     const courses = await prisma.course.findMany({
         where: {
-            trainer_id: trainer_id
-        }
+            trainer_id: trainer_id,
+            is_published: true,
+        },
     });
 
     if (!courses) {
