@@ -61,6 +61,7 @@ const findCourses = asyncHandler(async(req, res) => {
         },
         include: {
             language: true,
+            trainer: true,
         },
     });
 
