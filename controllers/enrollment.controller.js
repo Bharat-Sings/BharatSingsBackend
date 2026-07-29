@@ -2,11 +2,12 @@ import { PrismaClient } from "@prisma/client";
 import { asyncHandler } from "../utils/AsyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { connect } from "mongoose";
 
 const prisma = new PrismaClient();
 
 const createEnrollment = asyncHandler(async(req, res) => {
-    let { course_id } = req.body;
+    let { course_id, screenshot_id } = req.body;
 
     const user_id = req.user.id;
 
@@ -15,15 +16,28 @@ const createEnrollment = asyncHandler(async(req, res) => {
     }
 
     if (
-        !course_id
+        [course_id, screenshot_id].some((field) => !field)
     ) {
         throw new ApiError(401, "All fields are necessary");
     }
 
     const enrollment = await prisma.enrollment.create({
         data: {
-            user_id,
-            course_id
+            user: {
+                connect: {
+                    id: user_id
+                }
+            },
+            course: {
+                connect: {
+                    id: course_id
+                }
+            },
+            screenshot: {
+                connect: {
+                    id: screenshot_id
+                }
+            }
         }
     });
 

@@ -285,6 +285,36 @@ const publishCourse = asyncHandler(async(req, res) => {
     );
 });
 
+const findCourseById = asyncHandler(async(req, res) => {
+    const { course_id } = req.query;
+
+    if (!course_id) {
+        throw new ApiError(400, "Course Id Undefined");
+    }
+
+    const course = await prisma.course.findUnique({
+        where: {
+            id: course_id
+        }
+    });
+
+    if (!course) {
+        throw new ApiError(404, "Course not found");
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            {
+                course: course
+            },
+            "Successfully Found Course"
+        )
+    );
+});
+
 export {
     createCourse,
     findCourses,
@@ -293,5 +323,6 @@ export {
     findCoursesByLanguage,
     findCoursesByTrainerId,
     deleteCourse,
-    publishCourse
+    publishCourse,
+    findCourseById
 }
