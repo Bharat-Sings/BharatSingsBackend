@@ -92,6 +92,10 @@ const findCoursesByTitle = asyncHandler(async(req, res) => {
     const courses = await prisma.course.findMany({
         where: {
             title: title
+        },
+        include: {
+            trainer: true,
+            language: true
         }
     });
 
@@ -122,6 +126,10 @@ const findCoursesByCategory = asyncHandler(async(req, res) => {
     const courses = await prisma.course.findMany({
         where: {
             category: category
+        },
+        include: {
+            trainer: true,
+            language: true
         }
     });
 
@@ -152,6 +160,10 @@ const findCoursesByLanguage = asyncHandler(async(req, res) => {
     const course = await prisma.course.findMany({
         where: {
             language_id: language_id
+        },
+        include: {
+            trainer: true,
+            language: true
         }
     });
 
@@ -184,6 +196,9 @@ const findCoursesByTrainerId = asyncHandler(async(req, res) => {
             trainer_id: trainer_id,
             is_published: true,
         },
+        include: {
+            language: true
+        }
     });
 
     if (!courses) {
@@ -296,6 +311,10 @@ const findCourseById = asyncHandler(async(req, res) => {
     const course = await prisma.course.findUnique({
         where: {
             id: parseInt(course_id, 10)
+        },
+        include: {
+            trainer: true,
+            language: true
         }
     });
 
