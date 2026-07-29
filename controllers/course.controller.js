@@ -295,7 +295,7 @@ const findCourseById = asyncHandler(async(req, res) => {
 
     const course = await prisma.course.findUnique({
         where: {
-            id: course_id
+            id: parseInt(course_id, 10)
         }
     });
 
