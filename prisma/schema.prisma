@@ -145,7 +145,8 @@ model course {
   trainer_id         Int
   trainer            Trainer         @relation(fields: [trainer_id], references: [id])
   price              Float
-  paytm_phone_number String
+  paytm_phone_number String?
+  QR_file_path       String?
   //is_published   Boolean
   created_at         DateTime        @default(now())
   updated_at         DateTime        @updatedAt
