@@ -6,10 +6,16 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const prisma = new PrismaClient();
 
 const createEnrollment = asyncHandler(async(req, res) => {
-    let { user_id, course_id } = req.body;
+    let { course_id } = req.body;
+
+    const user_id = req.user.id;
+
+    if (!user_id) {
+        throw new ApiError(401, "Unauthorized Request");
+    }
 
     if (
-        [user_id, course_id].some((field) => !field)
+        !course_id
     ) {
         throw new ApiError(401, "All fields are necessary");
     }
@@ -65,10 +71,10 @@ const findEnrollmentsByCourseId = asyncHandler(async (req, res) => {
 });
 
 const findEnrollmentsByUserId = asyncHandler(async(req, res) => {
-    let { user_id } = req.query;
+    const user_id = req.user.id;
 
     if (!user_id) {
-        throw new ApiError(401, "User Id Undefined");
+        throw new ApiError(401, "Unauthorized Request");
     }
 
     const enrollments = await prisma.enrollment.findMany({
