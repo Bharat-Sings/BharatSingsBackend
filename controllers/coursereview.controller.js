@@ -6,10 +6,16 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const prisma = new PrismaClient();
 
 const createCourseReview = asyncHandler(async(req, res) => {
-    let { user_id, course_id, review_text, rating } = req.body;
+    let { course_id, review_text, rating } = req.body;
+    
+    const user_id = req.user.id;
+
+    if (!user_id) {
+        throw new ApiError(401, "Unauthorized Request");
+    }
 
     if (
-        [user_id, course_id, review_text, rating].some((field) => !field)
+        [course_id, review_text, rating].some((field) => !field)
         ||
         (review_text?.trim() === "")
     ) {
@@ -43,7 +49,7 @@ const createCourseReview = asyncHandler(async(req, res) => {
 });
 
 const findCourseReviewsByCourseId = asyncHandler(async(req, res) => {
-    let { courseId } = req.body;
+    let { courseId } = req.query;
 
     if (!courseId) {
         throw new ApiError(400, "Course Id Undefined");
@@ -51,7 +57,7 @@ const findCourseReviewsByCourseId = asyncHandler(async(req, res) => {
 
     const courseReviews = await prisma.course_review.findMany({
         where: {
-            course_id: courseId
+            course_id: parseInt(courseId, 10)
         }
     });
 
